@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_CONTACTS 100
+
+struct contact {
+    char name[30];
+    char phone[10];
+    char email[30];
+    char address[20];
+};
+
+void add_contact(struct contact *contacts, int *num_contacts) {
+    if (*num_contacts >= MAX_CONTACTS) {
+        printf("Maximum contacts reached.\n");
+        return;
+    }
+
+    struct contact new_contact;
+
+    printf("Enter name: ");
+    fgets(new_contact.name, 30, stdin);
+
+    printf("Enter phone number: ");
+    fgets(new_contact.phone, 10, stdin);
+
+    printf("Enter email address: ");
+    fgets(new_contact.email, 30, stdin);
+
+    printf("Enter address: ");
+    fgets(new_contact.address, 20, stdin);
+
+    contacts[*num_contacts] = new_contact;
+    *num_contacts += 1;
+
+    printf("Contact added successfully.\n");
+}
+
+void display_contact(struct contact *contacts, int num_contacts) {
+    if (num_contacts == 0) {
+        printf("No contacts found.\n");
+        return;
+    }
+
+    char search_term[50];
+    printf("Enter name or email to search: ");
+    fgets(search_term, 50, stdin);
+
+    for (int i = 0; i < num_contacts; i++) {
+        if (strstr(contacts[i].name, search_term) != NULL || strstr(contacts[i].email, search_term) != NULL) {
+            printf("Name: %s", contacts[i].name);
+            printf("Phone: %s", contacts[i].phone);
+            printf("Email: %s", contacts[i].email);
+            printf("Address: %s", contacts[i].address);
+            printf("\n");
+        }
+    }
+}
+
+int main() {
+    struct contact contacts[MAX_CONTACTS];
+    int num_contacts = 0;
+
+    int choice;
+
+    do {
+        printf("1. Add contact\n");
+        printf("2. Display contact\n");
+        printf("3. Exit\n");
+
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        getchar();
+
+        switch (choice) {
+            case 1:
+                add_contact(contacts, &num_contacts);
+                break;
+            case 2:
+                display_contact(contacts, num_contacts);
+                break;
+            case 3:
+                printf("Exiting program.\n");
+                break;
+            default:
+                printf("Invalid choice.\n");
+                break;
+        }
+    } while (choice != 3);
+
+    return 0;
+}
